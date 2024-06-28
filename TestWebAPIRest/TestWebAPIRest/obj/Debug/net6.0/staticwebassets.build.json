@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "efT3QJFe2ntygVvEDjokBlm5KbXRjhV/ydE8Yq74JJ0=",
+  "Source": "TestWebAPIRest",
+  "BasePath": "_content/TestWebAPIRest",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
