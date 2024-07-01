@@ -10,6 +10,7 @@ import { ResponseAPI } from '../models/responseAPI';
 export class ClienteService {
 
   private apiUrl:string = appsettings.apiUrl + "Cliente";
+  getData: any;
 
   constructor(private http: HttpClient) { }
 
