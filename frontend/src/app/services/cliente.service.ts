@@ -3,17 +3,15 @@ import { Injectable, inject } from '@angular/core';
 import { appsettings } from '../settings/appsettings';
 import { Cliente } from '../models/cliente';
 import { ResponseAPI } from '../models/responseAPI';
-import { Data } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClienteService {
 
-  private http = inject(HttpClient);
   private apiUrl:string = appsettings.apiUrl + "Cliente";
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   lista(){
     return this.http.get<Cliente[]>(this.apiUrl);

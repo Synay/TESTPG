@@ -1,35 +1,44 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, Pipe, PipeTransform, inject } from '@angular/core';
 
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonModule} from '@angular/material/button';
-import {FormBuilder,FormGroup,ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder,FormControl,FormGroup,ReactiveFormsModule, Validators} from '@angular/forms';
 import { ClienteService } from '../../services/cliente.service';
 import { Router } from '@angular/router';
 import { Cliente } from '../../models/cliente';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { PhoneMaskDirective } from '../../directives/phone-mask.directive';
+import { CommonModule } from '@angular/common';
+
 
 
 @Component({
   selector: 'app-cliente',
   standalone: true,
-  imports: [MatFormFieldModule,MatInputModule,MatButtonModule,ReactiveFormsModule],
+  providers: [provideNativeDateAdapter()],
+  imports: [MatFormFieldModule,MatInputModule,MatButtonModule,ReactiveFormsModule, MatDatepickerModule, CommonModule, PhoneMaskDirective
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './cliente.component.html',
   styleUrl: './cliente.component.css'
 })
+
+
 export class ClienteComponent implements OnInit {
 
   @Input('id') id! : number;
-  private clienteServicio = inject(ClienteService);
   public formBuild = inject(FormBuilder);
 
   public formCliente:FormGroup = this.formBuild.group({
-    nombre: [''],
-    telefono:[''],
-    pais:[''],
+    nombre: ['', Validators.required],
+    telefono:['', {updateOn: 'change', validators:[Validators.required], asyncValidators: []}],
+    pais:['', Validators.required],
     fechaCreacion:['']
   });
 
-  constructor(private router:Router){}
+  constructor(private router:Router, private clienteServicio: ClienteService){}
 
   ngOnInit(): void {
     if(this.id != 0){
@@ -55,7 +64,7 @@ guardar(){
     nombre: this.formCliente.value.nombre,
     telefono: this.formCliente.value.telefono,
     pais:this.formCliente.value.pais,
-    fechaCreacion:this.formCliente.value.fechaCreacion,
+    fechaCreacion:this.formCliente.value.fechaCreacion
   }
 
   if(this.id == 0){
@@ -91,6 +100,27 @@ guardar(){
 
 volver(){
   this.router.navigate(["/"]);
+}
+
+formatPhoneNumber(s: string) {
+
+  var s2 = ("" + s).replace(/\D/g, '');
+  var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
+  return (!m) ? null : "+" + m[1] + " " + m[3] + " " + m[3];
+}
+transform(val: string) {
+  var formattedPhone;
+  try {
+    formattedPhone = this.formatPhoneNumber(val);
+
+  } catch (error) {
+    formattedPhone = val;
+  }
+
+  if (formattedPhone == null)
+    formattedPhone = val;
+
+  return formattedPhone;
 }
 
 
