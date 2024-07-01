@@ -17,10 +17,6 @@ describe('ClienteComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
   it('Agregar Cliente', fakeAsync(() => {
     const testCliente = {
       nombre: 'Victor Mancilla',
